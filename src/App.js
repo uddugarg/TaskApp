@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
 
     //Getting all the tasks
-    const getTasks = async() => {
+    const getTasks = async () => {
       const AllTasks = await fetchTasks();
       setTasks(AllTasks);
     }
@@ -24,7 +24,7 @@ function App() {
     const res = await fetch('http://localhost:5000/tasks');
     const data = await res.json();
 
-    return(data);
+    return (data);
   }
 
   //fetching a single task
@@ -32,7 +32,7 @@ function App() {
     const res = await fetch(`http://localhost:5000/tasks/${id}`);
     const data = await res.json();
 
-    return(data);
+    return (data);
   }
 
   //Add Tasks Function
@@ -66,24 +66,23 @@ function App() {
 
   //Reminder Function
   const toggleReminder = async (id) => {
-    // console.log(id);
-
-    const toggleTask = await fetchTask(id);
-    const updateTask = {...toggleTask, reminder: !toggleTask.reminder};
+    const taskToToggle = await fetchTask(id)
+    const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
 
     const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-      method: "PUT",
-      headers:{
-        "Content-type": 'application/json'
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
       },
-      body: JSON.stringify(updateTask)
-    });
+      body: JSON.stringify(updTask),
+    })
 
-    const data = res.json()
+    const data = await res.json()
 
-    setTasks(tasks.map((task) =>
-      task.id === id ? { ...task, reminder: !data.reminder } : data
-    )
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, reminder: data.reminder } : task
+      )
     )
   };
 
